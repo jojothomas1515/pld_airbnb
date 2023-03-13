@@ -3,6 +3,8 @@
 from datetime import datetime
 from uuid import uuid4
 
+import models as md
+
 
 class BaseModel:
     """This is a class"""
@@ -10,7 +12,7 @@ class BaseModel:
     def __init__(self, *args, **kwargs):
         """constructor."""
 
-        if kwargs is not None:
+        if kwargs is not None and len(kwargs) != 0:
             for key, value in kwargs.items():
                 if "__class__" == key:
                     continue
@@ -22,6 +24,7 @@ class BaseModel:
             self.id = str(uuid4())
             self.created_at = datetime.now()
             self.updated_at = self.created_at
+            md.storage.new(self)
 
     def __str__(self):
         """String Representation."""
@@ -36,6 +39,7 @@ class BaseModel:
         """Save method."""
 
         self.updated_at = datetime.now()
+        md.storage.save()
 
     def to_dict(self):
         """to dictionary"""
